@@ -1,0 +1,31 @@
+[package]
+name        = "portdetective"
+version     = "0.1.0"
+edition     = "2024"
+description = "Tiny CLI to see what's running on a given TCP/UDP port"
+license     = "MIT"
+repository  = "https://github.com/makafui/portdetective"
+keywords    = ["port", "network", "process", "cli"]
+categories  = ["command-line-utilities"]
+
+[dependencies]
+clap        = { version = "4", features = ["derive"] }
+owo-colors  = "4"
+serde       = { version = "1", features = ["derive"] }
+serde_json  = "1"
+thiserror   = "2"
+sysinfo     = "0.33"
+netstat2    = "0.9"
+chrono      = { version = "0.4", features = ["serde"] }
+nix         = { version = "0.29", features = ["signal"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+procfs      = "0.17"
+
+[profile.release]
+lto           = "thin"
+codegen-units = 1
+strip         = true
+
+[lints.rust]
+unsafe_code = "forbid"
