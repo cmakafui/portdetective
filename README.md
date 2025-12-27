@@ -76,15 +76,24 @@ Interactive confirmation:
 Are you sure you want to kill PID 42193? [y/N]:
 ```
 
+### Commands & Aliases
+
+| Command | Aliases | Description |
+|---------|---------|-------------|
+| `portdetective <PORT>` | — | Inspect a port (shorthand) |
+| `portdetective inspect <PORT>` | `i` | Inspect what's on a port |
+| `portdetective list` | `l`, `ls` | List all listening ports |
+| `portdetective kill <PORT>` | `k` | Kill process on a port |
+
 ### Flags
 
-| Flag | Description |
-|------|-------------|
-| `--json` | Output as JSON |
-| `--tcp` | Only show TCP connections |
-| `--udp` | Only show UDP connections |
-| `--force` | Send SIGKILL instead of SIGTERM (kill command) |
-| `-y` | Skip confirmation prompt (kill command) |
+| Flag | Short | Description |
+|------|-------|-------------|
+| `--json` | `-j` | Output as JSON |
+| `--tcp` | — | Only show TCP connections |
+| `--udp` | — | Only show UDP connections |
+| `--force` | `-f` | Send SIGKILL instead of SIGTERM (kill) |
+| `--no-prompt` | `-y` | Skip confirmation prompt (kill) |
 
 ### JSON output
 
