@@ -1,10 +1,43 @@
 # 🔎 Port Detective
 
+[![CI](https://github.com/cmakafui/portdetective/workflows/CI/badge.svg)](https://github.com/cmakafui/portdetective/actions)
+[![Release](https://github.com/cmakafui/portdetective/workflows/Release/badge.svg)](https://github.com/cmakafui/portdetective/releases)
+
 **What's running on this port, and how do I safely kill it?**
 
 Port Detective is a tiny, fast Rust CLI that replaces the `lsof`/`netstat`/`ps` incantation soup with one clear command.
 
+## Platform Support
+
+- **Linux** (x86_64 glibc and musl)
+- **macOS** (Intel and Apple Silicon)
+- ~~Windows~~ (not yet supported due to Unix-only dependencies)
+
 ## Installation
+
+### Download pre-built binaries
+
+Download the latest release for your platform from the [releases page](https://github.com/cmakafui/portdetective/releases):
+
+```bash
+# Linux (glibc)
+curl -L https://github.com/cmakafui/portdetective/releases/latest/download/portdetective-linux-x86_64.tar.gz | tar xz
+sudo mv portdetective /usr/local/bin/
+
+# Linux (musl - static binary, no dependencies)
+curl -L https://github.com/cmakafui/portdetective/releases/latest/download/portdetective-linux-x86_64-musl.tar.gz | tar xz
+sudo mv portdetective /usr/local/bin/
+
+# macOS (Intel)
+curl -L https://github.com/cmakafui/portdetective/releases/latest/download/portdetective-macos-x86_64.tar.gz | tar xz
+sudo mv portdetective /usr/local/bin/
+
+# macOS (Apple Silicon)
+curl -L https://github.com/cmakafui/portdetective/releases/latest/download/portdetective-macos-aarch64.tar.gz | tar xz
+sudo mv portdetective /usr/local/bin/
+```
+
+### Build from source
 
 ```bash
 cargo install --path .
