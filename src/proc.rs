@@ -109,6 +109,7 @@ pub fn kill_process(pid: u32, force: bool) -> Result<()> {
 }
 
 #[cfg(target_os = "linux")]
+#[allow(dead_code)]
 pub fn get_cwd_linux(pid: u32) -> Option<std::path::PathBuf> {
     procfs::process::Process::new(pid as i32)
         .ok()
