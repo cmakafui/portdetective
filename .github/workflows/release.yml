@@ -54,10 +54,6 @@ jobs:
             target: aarch64-apple-darwin
             binary_name: portdetective
             asset_name: portdetective-macos-aarch64
-          - os: windows-latest
-            target: x86_64-pc-windows-msvc
-            binary_name: portdetective.exe
-            asset_name: portdetective-windows-x86_64.exe
 
     steps:
       - uses: actions/checkout@v4
@@ -92,25 +88,16 @@ jobs:
       - name: Build
         run: cargo build --release --target ${{ matrix.target }}
 
-      - name: Strip binary (Linux and macOS)
-        if: matrix.os != 'windows-latest'
+      - name: Strip binary
         run: strip target/${{ matrix.target }}/release/${{ matrix.binary_name }}
 
-      - name: Create archive (Linux and macOS)
-        if: matrix.os != 'windows-latest'
+      - name: Create archive
         run: |
           cd target/${{ matrix.target }}/release
           tar czf ${{ matrix.asset_name }}.tar.gz ${{ matrix.binary_name }}
           mv ${{ matrix.asset_name }}.tar.gz ../../..
 
-      - name: Create archive (Windows)
-        if: matrix.os == 'windows-latest'
-        run: |
-          cd target/${{ matrix.target }}/release
-          7z a ../../../${{ matrix.asset_name }}.zip ${{ matrix.binary_name }}
-
-      - name: Upload Release Asset (Linux and macOS)
-        if: matrix.os != 'windows-latest'
+      - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -119,17 +106,6 @@ jobs:
           asset_path: ./${{ matrix.asset_name }}.tar.gz
           asset_name: ${{ matrix.asset_name }}.tar.gz
           asset_content_type: application/gzip
-
-      - name: Upload Release Asset (Windows)
-        if: matrix.os == 'windows-latest'
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: ./${{ matrix.asset_name }}.zip
-          asset_name: ${{ matrix.asset_name }}.zip
-          asset_content_type: application/zip
 
   publish-cargo:
     name: Publish to crates.io
