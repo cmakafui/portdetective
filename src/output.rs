@@ -149,11 +149,11 @@ pub fn print_port_list_json(entries: &[PortEntry]) {
 }
 
 /// Print kill confirmation prompt
-pub fn print_kill_prompt(info: &ProcessInfo) {
+pub fn print_kill_prompt(port: u16, info: &ProcessInfo) {
     println!(
         "{} Port {} ({}) is in use by:",
         "🔎".yellow(),
-        info.protocol.to_string().dimmed(),
+        port.to_string().cyan().bold(),
         info.protocol.to_string().dimmed()
     );
     println!(
