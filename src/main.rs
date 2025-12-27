@@ -147,7 +147,7 @@ fn run_kill(
     let info = proc::inspect(socket.pid, socket.protocol)?;
 
     if !no_prompt {
-        output::print_kill_prompt(&info);
+        output::print_kill_prompt(socket.port, &info);
 
         print!("Are you sure you want to kill PID {}? [y/N]: ", info.pid);
         io::stdout().flush().unwrap();
