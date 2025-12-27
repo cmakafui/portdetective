@@ -93,20 +93,30 @@ mod tests {
     #[test]
     fn test_inspect_subcommand() {
         let cli = Cli::parse_from(["portdetective", "inspect", "8080"]);
-        assert!(matches!(cli.command, Some(Commands::Inspect { port: 8080 })));
+        assert!(matches!(
+            cli.command,
+            Some(Commands::Inspect { port: 8080 })
+        ));
     }
 
     #[test]
     fn test_inspect_alias() {
         let cli = Cli::parse_from(["portdetective", "i", "8080"]);
-        assert!(matches!(cli.command, Some(Commands::Inspect { port: 8080 })));
+        assert!(matches!(
+            cli.command,
+            Some(Commands::Inspect { port: 8080 })
+        ));
     }
 
     #[test]
     fn test_kill_subcommand_defaults() {
         let cli = Cli::parse_from(["portdetective", "kill", "3000"]);
         match cli.command {
-            Some(Commands::Kill { port, force, no_prompt }) => {
+            Some(Commands::Kill {
+                port,
+                force,
+                no_prompt,
+            }) => {
                 assert_eq!(port, 3000);
                 assert!(!force);
                 assert!(!no_prompt);
