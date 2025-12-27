@@ -20,9 +20,11 @@ fn main() -> ExitCode {
     let cli = Cli::parse();
 
     let result = match &cli.command {
-        Some(Commands::Kill { port, force, no_prompt }) => {
-            run_kill(*port, *force, *no_prompt, cli.protocol_filter(), cli.json)
-        }
+        Some(Commands::Kill {
+            port,
+            force,
+            no_prompt,
+        }) => run_kill(*port, *force, *no_prompt, cli.protocol_filter(), cli.json),
         Some(Commands::List) => run_list(cli.protocol_filter(), cli.json),
         Some(Commands::Inspect { port }) => run_inspect(*port, cli.protocol_filter(), cli.json),
         None => {
@@ -116,7 +118,13 @@ fn run_inspect(port: u16, filter: ProtocolFilter, json: bool) -> Result<ExitCode
 }
 
 /// Kill the process on a port
-fn run_kill(port: u16, force: bool, no_prompt: bool, filter: ProtocolFilter, json: bool) -> Result<ExitCode> {
+fn run_kill(
+    port: u16,
+    force: bool,
+    no_prompt: bool,
+    filter: ProtocolFilter,
+    json: bool,
+) -> Result<ExitCode> {
     let sockets = net::find_processes_by_port(port, filter)?;
 
     if sockets.is_empty() {
@@ -140,13 +148,13 @@ fn run_kill(port: u16, force: bool, no_prompt: bool, filter: ProtocolFilter, jso
 
     if !no_prompt {
         output::print_kill_prompt(&info);
-        
+
         print!("Are you sure you want to kill PID {}? [y/N]: ", info.pid);
         io::stdout().flush().unwrap();
 
         let mut input = String::new();
         io::stdin().read_line(&mut input).unwrap();
-        
+
         if !input.trim().eq_ignore_ascii_case("y") {
             output::print_kill_cancelled();
             return Err(PortDetectiveError::Cancelled);
@@ -162,7 +170,7 @@ fn run_kill(port: u16, force: bool, no_prompt: bool, filter: ProtocolFilter, jso
 /// List all listening ports
 fn run_list(filter: ProtocolFilter, json: bool) -> Result<ExitCode> {
     let ports_map = net::get_listening_ports(filter)?;
-    
+
     let mut entries: Vec<PortEntry> = Vec::new();
     let mut seen: std::collections::HashSet<(u16, u32)> = std::collections::HashSet::new();
 
@@ -179,7 +187,7 @@ fn run_list(filter: ProtocolFilter, json: bool) -> Result<ExitCode> {
                 } else {
                     info.command.join(" ")
                 };
-                
+
                 entries.push(PortEntry {
                     port,
                     protocol: socket.protocol,

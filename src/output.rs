@@ -37,18 +37,14 @@ fn print_in_use_port(report: &PortReport) {
 
 fn print_process_details(info: &ProcessInfo) {
     // Process name
-    println!(
-        "{}    {}",
-        "Process:".bold(),
-        info.name.green().bold()
-    );
-    
+    println!("{}    {}", "Process:".bold(), info.name.green().bold());
+
     // PID
     println!("{}        {}", "PID:".bold(), info.pid.to_string().yellow());
-    
+
     // User
     println!("{}       {}", "User:".bold(), info.user.cyan());
-    
+
     // Command
     let cmd = if info.command.is_empty() {
         info.name.clone()
@@ -56,12 +52,16 @@ fn print_process_details(info: &ProcessInfo) {
         info.command.join(" ")
     };
     println!("{}    {}", "Command:".bold(), cmd);
-    
+
     // Working directory
     if let Some(cwd) = &info.cwd {
-        println!("{}        {}", "CWD:".bold(), cwd.display().to_string().dimmed());
+        println!(
+            "{}        {}",
+            "CWD:".bold(),
+            cwd.display().to_string().dimmed()
+        );
     }
-    
+
     // Parent
     if let (Some(ppid), Some(pname)) = (&info.parent_pid, &info.parent_name) {
         println!(
@@ -71,7 +71,7 @@ fn print_process_details(info: &ProcessInfo) {
             ppid.to_string().dimmed()
         );
     }
-    
+
     // Start time
     if let Some(started) = &info.started {
         println!(
@@ -101,10 +101,7 @@ pub fn print_report_json(report: &PortReport) {
 /// Print a list of ports in table format
 pub fn print_port_list(entries: &[PortEntry]) {
     if entries.is_empty() {
-        println!(
-            "{} No listening ports found",
-            "✅".green()
-        );
+        println!("{} No listening ports found", "✅".green());
         return;
     }
 
@@ -164,14 +161,14 @@ pub fn print_kill_prompt(info: &ProcessInfo) {
         info.name.green().bold(),
         info.pid.to_string().yellow()
     );
-    
+
     let cmd = if info.command.is_empty() {
         info.name.clone()
     } else {
         info.command.join(" ")
     };
     println!("  Command: {}", cmd);
-    
+
     if let Some(cwd) = &info.cwd {
         println!("  CWD:     {}", cwd.display().to_string().dimmed());
     }

@@ -8,14 +8,17 @@ use sysinfo::{Pid, System, Users};
 /// Inspect a process by PID and gather detailed information
 pub fn inspect(pid: u32, protocol: Protocol) -> Result<ProcessInfo> {
     let mut sys = System::new();
-    sys.refresh_processes(sysinfo::ProcessesToUpdate::Some(&[Pid::from_u32(pid)]), true);
-    
+    sys.refresh_processes(
+        sysinfo::ProcessesToUpdate::Some(&[Pid::from_u32(pid)]),
+        true,
+    );
+
     let process = sys
         .process(Pid::from_u32(pid))
         .ok_or(PortDetectiveError::ProcessNotFound(pid))?;
 
     let users = Users::new_with_refreshed_list();
-    
+
     // Get user name
     let user = process
         .user_id()
@@ -24,7 +27,11 @@ pub fn inspect(pid: u32, protocol: Protocol) -> Result<ProcessInfo> {
         .unwrap_or_else(|| "unknown".to_string());
 
     // Get command line
-    let command: Vec<String> = process.cmd().iter().map(|s| s.to_string_lossy().to_string()).collect();
+    let command: Vec<String> = process
+        .cmd()
+        .iter()
+        .map(|s| s.to_string_lossy().to_string())
+        .collect();
 
     // Get working directory
     let cwd = process.cwd().map(|p| p.to_path_buf());
@@ -76,10 +83,14 @@ fn process_start_time(start_time: u64) -> Option<DateTime<Local>> {
 
 /// Kill a process by PID
 pub fn kill_process(pid: u32, force: bool) -> Result<()> {
-    use nix::sys::signal::{kill, Signal};
+    use nix::sys::signal::{Signal, kill};
     use nix::unistd::Pid as NixPid;
 
-    let signal = if force { Signal::SIGKILL } else { Signal::SIGTERM };
+    let signal = if force {
+        Signal::SIGKILL
+    } else {
+        Signal::SIGTERM
+    };
     let nix_pid = NixPid::from_raw(pid as i32);
 
     kill(nix_pid, signal).map_err(|e| {

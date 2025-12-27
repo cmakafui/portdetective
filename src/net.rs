@@ -4,8 +4,7 @@ use crate::cli::ProtocolFilter;
 use crate::error::{PortDetectiveError, Result};
 use crate::model::Protocol;
 use netstat2::{
-    get_sockets_info, AddressFamilyFlags, ProtocolFlags, ProtocolSocketInfo, SocketInfo,
-    TcpState,
+    AddressFamilyFlags, ProtocolFlags, ProtocolSocketInfo, SocketInfo, TcpState, get_sockets_info,
 };
 use std::collections::HashMap;
 
@@ -28,7 +27,7 @@ pub fn find_processes_by_port(port: u16, filter: ProtocolFilter) -> Result<Vec<B
 /// Get all listening sockets
 pub fn get_listening_sockets(filter: ProtocolFilter) -> Result<Vec<BoundSocket>> {
     let af_flags = AddressFamilyFlags::IPV4 | AddressFamilyFlags::IPV6;
-    
+
     let proto_flags = match filter {
         ProtocolFilter::TcpOnly => ProtocolFlags::TCP,
         ProtocolFilter::UdpOnly => ProtocolFlags::UDP,
@@ -53,11 +52,11 @@ pub fn get_listening_sockets(filter: ProtocolFilter) -> Result<Vec<BoundSocket>>
 pub fn get_listening_ports(filter: ProtocolFilter) -> Result<HashMap<u16, Vec<BoundSocket>>> {
     let sockets = get_listening_sockets(filter)?;
     let mut map: HashMap<u16, Vec<BoundSocket>> = HashMap::new();
-    
+
     for socket in sockets {
         map.entry(socket.port).or_default().push(socket);
     }
-    
+
     Ok(map)
 }
 
