@@ -15,6 +15,12 @@ Port Detective is a tiny, fast Rust CLI that replaces the `lsof`/`netstat`/`ps` 
 
 ## Installation
 
+### Using Cargo (Recommended)
+
+```bash
+cargo install portdetective
+```
+
 ### Download pre-built binaries
 
 Download the latest release for your platform from the [releases page](https://github.com/cmakafui/portdetective/releases):
@@ -40,6 +46,8 @@ sudo mv portdetective /usr/local/bin/
 ### Build from source
 
 ```bash
+git clone https://github.com/cmakafui/portdetective.git
+cd portdetective
 cargo install --path .
 ```
 
